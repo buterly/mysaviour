@@ -96,3 +96,4 @@ asker xfce4-terminal
 
 installer xclip
 
+installer picom
