@@ -10,7 +10,7 @@
 <b> Now copy the files inside `dotfiles` to `~/.config`
 <br><b> If you dont have Adwaita-dark installed extract the adwaita zip file and paste it to `/usr/share/themes`
 <br><b> Paste the `Xresources` into home as `.Xresources` : `cp Xresources ~/.Xresources`
-
+<br><b> You can install lxappearance to change theme systemwide or for GTK apps: `sudo dnf install lxappearance`
 <br><br><b> You should be good to go now, btw this is for fedora i3 spin if you have something else you may need to install some extra things
 
 
