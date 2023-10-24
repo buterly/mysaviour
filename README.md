@@ -8,7 +8,7 @@
 
 <b> Now copy the fonts inside `localFonts` to `~/.local/share/fonts` <br>
 <b> Now copy the files inside `dotfiles` to `~/.config`
-<b> You should be good to go now, btw this is for fedora i3 spin if you have something else you may need to install some extra things
+<br><br><b> You should be good to go now, btw this is for fedora i3 spin if you have something else you may need to install some extra things
 
 
 
