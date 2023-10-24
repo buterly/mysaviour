@@ -1,0 +1,276 @@
+# vim: filetype=i3config
+
+# This config file will use environment variables such as $BROWSER and $TERMINAL.
+
+font pango:DejaVu Sans Mono 10
+
+
+
+ #---Basic Definitions---# #
+# smart_gaps on
+# smart_borders no_gaps 
+
+set $term xfce4-terminal
+set $mod Mod4
+set $exe exec --no-startup-id
+set $alt Mod1
+set $lock i3lock
+set $suspend sudo systemctl suspend
+set $browser microsoft-edge  
+set $browser2 brave-browser 
+set $i3path ~/.config/i3
+
+set $ROFI_THEMES_FOLDER $HOME/.config/rofi
+
+
+# # --- Autostarting things ----- # #
+
+# exec_always ~/.config/polybar/launch.sh
+$exe $HOME/.config/polybar/launch.sh --hack &
+
+exec_always brightnessctl s 3%
+
+# set background
+$exe feh --bg-fill ~/Pictures/Wallpapers/w1.jpg
+
+exec_always picom -b   
+#--corner-radius 6 --config $HOME/.config/picom/picom.conf
+
+$exe nm-applet & 
+
+# password prompt 
+$exe /usr/libexec/kf5/polkit-kde-authentication-agent-1  
+
+$exe dunst & 
+# $exe xfce4-power-manager &
+
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# #---Gaps---# #
+
+set $inner_gaps 7
+set $outer_gaps 7
+
+gaps inner $inner_gaps 
+gaps outer $outer_gaps
+
+
+
+# #------------------Basic Bindings---# #
+
+bindsym $mod+Return 		         exec $term
+bindsym $mod+Shift+Return	       exec $term --working-directory  $(xcwd)
+
+bindsym $mod+Shift+Delete         $exe $i3path/scripts/reboot
+
+# space
+#bindsym $mod+space 			            $exe rofi -show drun -theme $ROFI_THEMES_FOLDER/launcher_side.rasi
+bindsym $mod+space                    $exe rofi -show drun 
+
+
+# #-------------------Letter Key Bindings---# #
+bindsym $mod+q			            [con_id="__focused__" instance="^(?!dropdown_).*$"] kill
+
+# c
+#bindsym $mod+c				$exe rofi -show calc -modi calc -no-show-match -no-sort > /dev/null
+
+# w
+bindsym $mod+w 			            $exe $browser
+
+# e
+bindsym $mod+e 			            $exe $browser2
+
+
+# r
+bindsym $mod+r 			            exec $term -e ranger
+bindsym $mod+Shift+r		        $exe winresize
+
+# t
+bindsym $mod+Shift+t            focus mode_toggle
+
+# y
+bindsym $mod+y			            $exe flameshot gui   
+bindsym $mod+Shift+y		        $exe flameshot full -p ~/Pictures/Screenshots
+
+# u
+bindsym $mod+u                  [urgent=latest] focus
+
+# a
+bindsym $mod+a		              exec $term -e 'alsamixer -V capture' 
+
+# d
+bindsym $mod+d                  $exe i3-dmenu-desktop --dmenu='dmenu -nf #2DD4DC -i -fn 'pixelsize=18''
+
+# f
+bindsym $mod+f			            fullscreen toggle
+bindsym $mod+Shift+f 	          floating toggle
+
+# g
+bindsym $mod+g		              gaps inner current set $inner_gaps; gaps outer current set $outer_gaps
+bindsym $mod+Shift+g		        gaps inner all set 0; gaps outer all set 0
+
+# h
+bindsym $mod+h			            focus left
+bindsym $mod+Shift+h		        move left 30
+
+# j
+bindsym $mod+j			            focus down
+bindsym $mod+Shift+j		        move down 30
+
+# k
+bindsym $mod+k			            focus up
+bindsym $mod+Shift+k		        move up 30
+
+# l
+bindsym $mod+l			            focus right
+bindsym $mod+Shift+l		        move right 30
+
+# p - kill transparency
+bindsym $mod+Shift+p		        $exe killall picom
+
+# b - background
+bindsym $mod+Ctrl+b			            $exe feh --bg-fill --randomize ~/Pictures/Wallpapers/*
+
+#--------------------------------- Launching applications-------------------------#
+
+bindsym $mod+Ctrl+Shift+i     	 $exe i3-msg workspace "$(( $(i3-msg -t get_workspaces | jq -r '.[] | select(.focused==true).name')+1))";$exe $browser --new-window "https://www.instagram.com";
+bindsym $mod+Ctrl+i     	 $exe $browser --new-window "https://www.instagram.com";
+bindsym $mod+Ctrl+y 	     $exe $browser --new-window "https://youtube.com";
+bindsym $mod+Ctrl+w 	     $exe $browser --new-window "https://web.whatsapp.com";
+
+
+#bindsym $mod+Ctrl+y 	     $exe link=$(dmenu < /dev/null | xargs -I {} echo "https://www.youtube.com/results?search_query={}" | tr  ' ' '+') && wait && $browser $link 
+bindsym $mod+Ctrl+d 	     $exe $browser --new-window "https://discord.com/app"
+bindsym $mod+Ctrl+z 	     $exe  link=$(dmenu < /dev/null | xargs -I {} echo "https://sanji.to/search?keyword={}" | tr  ' ' '+') && wait && $browser $link 
+bindsym $mod+m 	           $exe  link=$(dmenu < /dev/null | xargs -I {} echo "https://www.bing.com/search?q={}" | tr  ' ' '+') && wait && $browser --new-window $link  
+bindsym $mod+Ctrl+g 	     $exe $browser --app="https://www.desmos.com/calculator"  
+bindsym $mod+Ctrl+r 	     $exe $browser --app="https://reddit.com"  
+
+bindsym $mod+Ctrl+m 	     $exe  $term -e musikcube  
+bindsym $mod+Ctrl+s	     $exe  firefox --app="https://open.spotify.com"  
+bindsym $mod+period	     $exe  rofimoji 
+bindsym $mod+Ctrl+j	     $exe  $browser "https:/www.justinguitar.com/guitar-lessons"
+bindsym $mod+Ctrl+f	     $exe  nautilus 
+
+bindsym $mod+b	     	     exec bluetoothctl connect  FC:58:FA:C9:D9:A7
+bindsym $mod+Shift+b	     exec bluetoothctl disconnect FC:58:FA:C9:D9:A7 
+bindsym $mod+z	     exec  --no-startup-id $browser "https://www.hackerrank.com/dashboard"
+
+# #---Workspace Bindings---# #
+
+#bindsym $mod+Tab		            $exe rofi -show window
+bindsym $mod+Tab		          workspace next
+bindsym $mod+Shift+Tab		      workspace previous
+bindsym $mod+apostrophe		      split horizontal ;; exec $term
+bindsym $mod+slash		          split vertical ;; exec $term
+bindsym $mod+backslash		      workspace back_and_forth
+
+
+# # ---- Change container layout (stacked, tabbed, toggle split) ----- # #
+
+bindsym $mod+s layout stacking
+bindsym $mod+t layout tabbed
+bindsym $mod+Shift+slash layout toggle split
+
+# --------Scratchpad------ # 
+bindsym $mod+Shift+minus		move scratchpad 
+bindsym $mod+minus			scratchpad show
+
+
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# switch to workspace
+bindsym $mod+1		workspace $ws1
+bindsym $mod+2		workspace $ws2
+bindsym $mod+3		workspace $ws3
+bindsym $mod+4		workspace $ws4
+bindsym $mod+5		workspace $ws5
+bindsym $mod+6		workspace $ws6
+bindsym $mod+7		workspace $ws7
+bindsym $mod+8		workspace $ws8
+bindsym $mod+9		workspace $ws9
+bindsym $mod+0		workspace $ws10
+
+# move focused container to workspace
+bindsym $mod+Shift+1	move container to workspace $ws1
+bindsym $mod+Shift+2	move container to workspace $ws2
+bindsym $mod+Shift+3	move container to workspace $ws3
+bindsym $mod+Shift+4	move container to workspace $ws4
+bindsym $mod+Shift+5	move container to workspace $ws5
+bindsym $mod+Shift+6	move container to workspace $ws6
+bindsym $mod+Shift+7	move container to workspace $ws7
+bindsym $mod+Shift+8	move container to workspace $ws8
+bindsym $mod+Shift+9	move container to workspace $ws9
+bindsym $mod+Shift+0	move container to workspace $ws10
+
+# specific for window tweaks
+for_window [class="^.*"] border pixel 4
+for_window [title=".*Emulator.*"] floating enable
+for_window [window_role="GtkFileChooserDialog"] resize set 800 600
+for_window [window_role="GtkFileChooserDialog"] move position center
+for_window [title="^.*Mozilla Firefox"] border pixel 1
+for_window [window_role="mate-calc"] floating enable
+for_window [title="^.*CopyQ"] floating enable; border none 
+
+# #---System Related / Function keys ---# #
+bindsym $mod+F1		        restart
+bindsym $mod+F12	        exec $term -e nmtui
+
+# #---Arrow Keys---# #
+bindsym $mod+Left		      focus left
+bindsym $mod+Shift+Left   resize shrink width 5 px or 5 ppt
+bindsym $mod+Ctrl+Left		move workspace to output right
+bindsym $mod+Down		      focus down
+bindsym $mod+Shift+Down   resize shrink height 5 px or 5 ppt
+bindsym $mod+Ctrl+Down		move workspace to output up
+bindsym $mod+Up			      focus up
+bindsym $mod+Shift+Up     resize grow height 5 px or 5 ppt
+bindsym $mod+Ctrl+Up		  move workspace to output down
+bindsym $mod+Right 		    focus right
+bindsym $mod+Shift+Right  resize grow width 5 px or 5 ppt
+bindsym $mod+Ctrl+Right		move workspace to output left
+
+# Pulse Audio controls - origininal
+bindsym XF86AudioRaiseVolume $exe pactl set-sink-volume @DEFAULT_SINK@ +1% #increase sound volume
+bindsym XF86AudioLowerVolume $exe pactl set-sink-volume @DEFAULT_SINK@ -1% #decrease sound volume
+bindsym XF86AudioMute        $exe pactl set-sink-mute @DEFAULT_SINK@ toggle && pkill -RTMIN+10 i3blocks #mute sound
+bindsym XF86Calculator       exec mate-calc
+
+# brightness
+#up
+bindsym XF86MonBrightnessUp $exe brightnessctl s +1% && notify-send battery "$(brightnessctl i)" -t 500
+#down
+bindsym XF86MonBrightnessDown $exe brightnessctl s 1%- && notify-send battery "$(brightnessctl i)" -t 500
+
+# Window borders
+# class                 border  backgr   text   indicator   child_border
+# client.focused          #458588 #98971a #d79921 #98971
+# client.focused_inactive #333333 #5f676a #ffffff #484e50   #5f676a
+# client.unfocused        #333333 #222222 #888888 #292d2e   #222222
+# client.urgent           #2f343a #900000 #ffffff #900000   #900000
+# client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
+# client.background       #4c7899
+
+set_from_resource $bg_act i3wm.color1 #333333
+set_from_resource $bg_inact i3wm.color0 #333333
+set_from_resource $fg_txt i3wm.color0 #333333
+set_from_resource $fg_inact_txt i3wm.color1 #333333
+set_from_resource $background i3wm.color9 #333333
+
+client.focused          #333333     $bg_act     $fg_txt     #2e9ef4       #285577
+client.focused_inactive #333333     $bg_inact   $fg_inact_txt #484e50     #5f676a
+client.unfocused        #333333     #222222     #888888     #292d2e       #222222
+client.urgent           #2f343a     #900000     #ffffff     #900000       #900000
+client.placeholder      #000000     #0c0c0c     #ffffff     #000000       #0c0c0c
+client.background       $background
