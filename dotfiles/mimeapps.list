@@ -1,0 +1,7 @@
+[Added Associations]
+text/plain=nvim.desktop;
+application/x-zerosize=nvim.desktop;
+
+[Default Applications]
+text/plain=nvim.desktop
+x-scheme-handler/http=brave-browser.desktop
